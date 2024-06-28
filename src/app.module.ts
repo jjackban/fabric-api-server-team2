@@ -9,6 +9,7 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { UsersService } from './users/users.service';
 import { UsersController } from './users/users.controller';
 import { AuthModule } from './auth/auth.module';
+import { ProductsController } from './products/products.controller';
 
 @Module({
   imports: [
@@ -35,7 +36,7 @@ import { AuthModule } from './auth/auth.module';
     AuthModule,
     TypeOrmModule.forFeature([Product, User]),
   ],
-  controllers: [AppController, UsersController],
+  controllers: [AppController,ProductsController, UsersController],
   providers: [AppService, ProductsService, UsersService],
 })
 export class AppModule {}
