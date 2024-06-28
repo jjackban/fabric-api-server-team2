@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>My Page</title>
+  <script>
+    function logout() {
+      // 폼 엘리먼트 생성
+      var form = document.createElement('form');
+      form.method = 'post';
+      form.action = '/users/logout';  // 로그아웃 처리할 엔드포인트
+document.body.appendChild(form);
+      form.submit();
+    }
+
+  </script>
+</head>
+<body>
+  <h1>Welcome, {{ user.name }}!</h1>
+  <p>This is your personalized page.</p>
+  <a href="#" onclick="logout(); return false;">Logout</a>
+</body>
+</html>

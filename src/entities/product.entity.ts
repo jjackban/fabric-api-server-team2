@@ -7,6 +7,15 @@ export class Product {
   
     @Column()
     name: string;
+
+    @Column()
+    styleNum: string;
+
+    @Column()
+    brand: string;
+
+    @Column()
+    inventory: number;
   
     @Column()
     price: number;

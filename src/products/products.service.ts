@@ -2,13 +2,13 @@ import { NotFoundException } from '@nestjs/common';
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { Product } from './entities/product.entity';
+import { Product } from '../entities/product.entity';
 
 @Injectable()
 export class ProductsService {
   constructor(
     @InjectRepository(Product)
-    private productsRepository: Repository<Product>, // UserRepository 주입
+    private productsRepository: Repository<Product>,
   ) {}
 
   async create(product: Product): Promise<Product> {

@@ -1,9 +1,36 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <title>Title</title>
-  </head>
-  <body>
-    {{message}}
-  </body>
+<head>
+  <title>Login Example</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.24.0/axios.min.js"></script>
+</head>
+<body>
+  <h1>Login Page</h1>
+  <form id="loginForm">
+    <label for="id">Username:</label>
+    <input type="text" id="id" name="id" required><br><br>
+    <label for="password">Password:</label>
+    <input type="password" id="password" name="password" required><br><br>
+    <button type="submit">Login</button>
+  </form>
+
+  <div id="message"></div>
+
+  <script>
+    document.getElementById('loginForm').addEventListener('submit', async function(event) {
+      event.preventDefault();
+      const id = document.getElementById('id').value;
+      const password = document.getElementById('password').value;
+
+      try {
+        const response = await axios.post('/users/login', { id, password });
+        console.log(response.data);
+        window.location.href = '/mypage';
+      } catch (error) {
+        console.error('Login error:', error);
+        document.getElementById('message').innerText = 'Login failed. Please try again.';
+      }
+    });
+  </script>
+</body>
 </html>

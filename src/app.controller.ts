@@ -1,7 +1,11 @@
-import { Controller, Get, Query, Post, Body } from '@nestjs/common';
+import { Controller, Get, Query, Post, Body, Render, UseGuards, Req } from '@nestjs/common';
 import { AppService } from './app.service';
 import { ProductsService } from './products/products.service';
-import { Product } from './products/entities/product.entity';
+import { Product } from './entities/product.entity';
+import { UsersService } from './users/users.service';
+import { User } from './entities/user.entity';
+import { LoggedInGuard } from './auth/logged-in.guard';
+
 
 @Controller()
 export class AppController {
@@ -11,8 +15,17 @@ export class AppController {
   ) {}
 
   @Get()
-  getHello(): string {
-    return this.appService.getHello();
+  @Render('index')
+  showindexPage(){
+    return;
+  }
+
+  @Get('mypage')
+  @UseGuards(LoggedInGuard)
+  @Render('mypage')
+  async myPage(@Req() req) {
+    const { user } = req;
+    return { user };
   }
 
   @Get('/init')
