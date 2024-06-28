@@ -1,18 +1,26 @@
-import { Controller, Get, Query, Post, Body } from '@nestjs/common';
+import { Controller, Get, Query, Post, Body, Render, UseGuards, Req } from '@nestjs/common';
 import { AppService } from './app.service';
-import { ProductsService } from './products/products.service';
-import { Product } from './products/entities/product.entity';
+import { LoggedInGuard } from './auth/logged-in.guard';
+
 
 @Controller()
 export class AppController {
   constructor(
-    private readonly appService: AppService,
-    private readonly ProductsService: ProductsService
+    private readonly appService: AppService
   ) {}
 
   @Get()
-  getHello(): string {
-    return this.appService.getHello();
+  @Render('index')
+  showindexPage(){
+    return;
+  }
+
+  @Get('mypage')
+  @UseGuards(LoggedInGuard)
+  @Render('mypage')
+  async myPage(@Req() req) {
+    const { user } = req;
+    return { user };
   }
 
   @Get('/init')
@@ -44,10 +52,5 @@ export class AppController {
     @Query('name') name: string,
   ): Promise<string> {
     return this.appService.delete(name);
-  }
-  
-  @Post('/create')
-  async create(@Body() product: Product): Promise<Product> {
-    return this.ProductsService.create(product);
   }
 }
