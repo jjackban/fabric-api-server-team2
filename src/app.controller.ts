@@ -31,6 +31,24 @@ export class AppController {
     return this.appService.init(user, userval);
   }
 
+  @Get('/initItem')
+  async initItem(
+    @Query('itemName') itemName: string,
+    @Query('styleNum') styleNum: string,
+    @Query('brand') brand: string,
+    @Query('inventory') inventory: string,
+  ): Promise<string> {
+    return this.appService.initItem(itemName, styleNum, brand, inventory);
+  }
+
+  @Get('/charge')
+  async charge(
+    @Query('user') user: string,
+    @Query('userval') userval: string,
+  ): Promise<string> {
+    return this.appService.charge(user, userval);
+  }
+
   @Get('/invoke')
   async invoke(
     @Query('sender') sender: string,
@@ -40,11 +58,33 @@ export class AppController {
     return this.appService.invoke(sender, reciever, value);
   }
 
+  @Get('/purchaseItem')
+  async purchaseItem(
+    @Query('user') user: string,
+    @Query('itemId') itemId: string,
+  ): Promise<string> {
+    return this.appService.purchaseItem(user, itemId);
+  }
+
   @Get('/query')
   async query(
     @Query('name') name: string,
   ): Promise<string> {
     return this.appService.query(name);
+  }
+
+  @Get('/queryitem')
+  async queryitem(
+    @Query('itemId') itemId: string,
+  ): Promise<string> {
+    return this.appService.queryitem(itemId);
+  }
+
+  @Get('/querypurchase')
+  async querypurchase(
+    @Query('user') user: string,
+  ): Promise<string> {
+    return this.appService.querypurchase(user);
   }
 
   @Get('/delete')
