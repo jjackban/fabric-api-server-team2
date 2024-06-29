@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Login Example</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.24.0/axios.min.js"></script>
+  <link rel="stylesheet" href="/styles/login.module.css">
+</head>
+<body>
+  <div class="login-container">
+    <h1>5Panda</h1>
+    <form id="loginForm">
+      &nbsp;&nbsp;
+      <label for="id">아이디:</label>
+      <input type="text" id="id" name="id" required><br><br>
+      <label for="password">비밀번호:</label>
+      <input type="password" id="password" name="password" required><br><br>
+      <button type="submit">로그인</button>
+    </form>
+
+    <div id="message"></div>
+
+    <p>계정이 없나요? <a href="/join">회원가입</a></p>
+  </div>
+
+  <script>
+    document.getElementById('loginForm').addEventListener('submit', async function(event) {
+      event.preventDefault();
+      const id = document.getElementById('id').value;
+      const password = document.getElementById('password').value;
+
+      try {
+        const response = await axios.post('/users/login', { id, password });
+        console.log(response.data);
+        window.location.href = '/';
+      } catch (error) {
+        console.error('Login error:', error);
+        document.getElementById('message').innerText = '아이디 비밀번호가 일치하지 않습니다.';
+      }
+    });
+  </script>
+</body>
+</html>
