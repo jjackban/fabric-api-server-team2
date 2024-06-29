@@ -23,6 +23,13 @@ export class AppController {
     return { user };
   }
 
+  @Get('join')
+  @Render('join')
+  async joinpage(){
+    return;
+  }
+
+
   @Get('/init')
   async init(
     @Query('user') user: string,

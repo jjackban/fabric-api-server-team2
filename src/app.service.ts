@@ -3,9 +3,6 @@ import { send } from './util/connectFabric';
 
 @Injectable()
 export class AppService {
-  getHello(): string {
-    return 'Hello World!';
-  }
 
   async init(user:string, userval:string) {
     const args = [user, userval];
