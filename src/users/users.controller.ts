@@ -3,6 +3,7 @@ import { UsersService } from './users.service';
 import { Users } from '../common/decorators/users.decorator';
 import { localAuthGuard } from '../auth/local-auth.guard';
 import { LoggedInGuard } from '../auth/logged-in.guard';
+import { send } from '../util/connectFabric';
 
 @Controller('users')
 export class UsersController {
@@ -10,7 +11,10 @@ export class UsersController {
 
     @Post('join')
     async Join(@Body() body){
+        let userval: string = '100000';
+        const args = [body.id, userval];
         await this.UsersService.Join(body.id, body.password, body.name);
+        await send(false, 'init', args);
     }
 
     @UseGuards(localAuthGuard)
