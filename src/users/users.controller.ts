@@ -24,7 +24,7 @@ export class UsersController {
     }
 
     @UseGuards(LoggedInGuard)
-    @Post('logout')
+    @Get('logout')
     async logOut(@Req() req, @Res() res) {
         await new Promise<void>((resolve, reject) => {
         req.logout((err) => {
@@ -37,6 +37,6 @@ export class UsersController {
         });
 
         res.clearCookie('connect.sid', { httpOnly: true });
-        res.send('OK');
+        res.redirect('/'); 
         }
 }

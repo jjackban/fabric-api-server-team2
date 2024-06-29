@@ -1,7 +1,7 @@
 import { Controller, Get, Query, Post, Body, Render, UseGuards, Req } from '@nestjs/common';
 import { AppService } from './app.service';
 import { LoggedInGuard } from './auth/logged-in.guard';
-
+import { homepaGeGuard } from './auth/homepage.guard';
 
 @Controller()
 export class AppController {
@@ -10,9 +10,11 @@ export class AppController {
   ) {}
 
   @Get()
+  @UseGuards(homepaGeGuard)
   @Render('index')
-  showindexPage(){
-    return;
+  async indexpage(@Req() req) {
+    const { user } = req;
+    return { user };
   }
 
   @Get('mypage')
@@ -29,6 +31,11 @@ export class AppController {
     return;
   }
 
+  @Get('login')
+  @Render('login')
+  async loginpage(){
+    return;
+  }
 
   @Get('/init')
   async init(
