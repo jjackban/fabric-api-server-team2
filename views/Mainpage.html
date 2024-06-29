@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Admin Page</title>
+    <link href="https://fonts.googleapis.com/css?family=Lobster&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Single+Day&display=swap&subset=korean" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Nanum+Brush+Script&display=swap&subset=korean" rel="stylesheet">
+    <link rel="stylesheet" href="Admin.css">
+
+    <script>
+        function logout() {
+            window.location.href = 'css/Mainpage.html';
+        }
+
+        //상품클릭 시
+        function product1(){
+
+        }
+    </script>
+
+</head>
+<body>
+    <div id="header">
+        <div class="title-container">
+            <h1><a href="./Admin.html">My Hobbies</a></h1>
+        </div>
+        <div id="admin-buttons">
+            <div class="admin-box">
+                Admin 님<br>환영합니다!
+            </div>
+            <div class="admin-box" id="point-box">
+                보유포인트 : 0000
+            </div>
+            <button onclick="logout()">Logout</button>
+            <a href="Mypage.html"><input type="button" value="Mypage"></a>
+        </div>
+    </div>
+
+    <div id="nav">
+        <ul>
+            <li><a href="">상의</a></li>
+            <li><a href="">하의</a></li>
+            <li><a href="">신발</a></li>
+            <li><a href="">악세서리</a></li>
+        </ul>
+    </div>
+
+    <!-- <div class="clothes">
+        <img src="clothes.png" onclick="product1()">
+        <img src="clothes.png" onclick="product2()">
+        <img src="clothes.png" onclick="product3()">
+    </div> -->
+
+</body>
+</html>
