@@ -1,22 +1,419 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <title>My Page</title>
-  <script>
-    function logout() {
-      // 폼 엘리먼트 생성
-      var form = document.createElement('form');
-      form.method = 'post';
-      form.action = '/users/logout';  // 로그아웃 처리할 엔드포인트
-document.body.appendChild(form);
-      form.submit();
-    }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Page</title>
+    <link href="https://fonts.googleapis.com/css?family=Lobster&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Single+Day&display=swap&subset=korean" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Nanum+Brush+Script&display=swap&subset=korean" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    
 
-  </script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+
+        #mypage-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: #333;
+            color: white;
+            padding: 10px 20px;
+        }
+
+        #mypage-header h1 a {
+            color: white;
+            text-decoration: none;
+        }
+
+        #user-info {
+            text-align: right;
+        }
+
+        #user-info a {
+            color: white;
+            text-decoration: none;
+            margin-left: 10px;
+        }
+
+        #mypage-content {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+            padding: 20px;
+        }
+
+        .mypage-section {
+            border: 1px solid #ccc;
+            padding: 10px;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+
+        }
+
+        .mypage-section h2 {
+            font-family: 'Lobster', cursive;
+            font-size: 24px;
+            margin-bottom: 10px;
+        }
+
+        ul {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        ul li {
+            margin-bottom: 5px;
+        }
+
+        #user-point {
+            font-family: 'Single Day', sans-serif;
+            font-size: 18px;
+        }
+
+        button {
+            background-color: #333;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            cursor: pointer;
+            font-size: 14px;
+            width: auto; 
+            margin: 0 auto; 
+            display: block; 
+        }
+
+        button:hover {
+            background-color: #555;
+        }
+
+        .container {
+            text-align: center;
+            margin-top: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center; 
+        }
+
+        .container img {
+            max-width: 100%;
+            height: auto;
+            margin-bottom: 10px;
+        }
+
+        .container input[type="button"] {
+            width: auto;
+            margin-top: 10px;
+            background-color: #333;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: background-color 0.3s;
+        }
+
+        .container input[type="button"]:hover {
+            background-color: #555;
+        }
+
+        input[type="text"] {
+            width: 100%;
+            padding: 5px;
+            margin-bottom: 5px;
+            box-sizing: border-box;
+        }
+
+        footer {
+            background-color: #333;
+            color: white;
+            text-align: center;
+            padding: 10px 0;
+            position: fixed;
+            width: 100%;
+            bottom: 0;
+        }
+
+        .product-input {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 10px;
+        }
+
+        .custom-button {
+            background-color: #333;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            cursor: pointer;
+            font-size: 14px;
+            margin-top: 10px;
+            transition: background-color 0.3s;
+            width: auto;
+        }
+
+        .custom-button:hover {
+            background-color: #555;
+        }
+    </style>
+
+    <script>
+        var myPoint = 0;
+
+        //포인트 숨겨주는 함수
+        function hidePoint() {
+            var items = ['point-1000', 'point-5000', 'point-10000' ,'point-hide'];
+            items.forEach(function(id){
+                document.getElementById(id).style.display = 'none';
+            });
+        }
+
+        //숨겼던 포인트 보여주는 함수
+        function showPointPurchase(content){
+            var point1000 = document.getElementById('point-1000');
+            var point5000 = document.getElementById('point-5000');
+            var point10000 = document.getElementById('point-10000');
+            var pointHide = document.getElementById('point-hide');
+
+            point1000.style.display = 'none';
+            point5000.style.display = 'none';
+            point10000.style.display = 'none';
+            pointHide.style.display = 'none';
+
+            if(content === 'show'){
+                point1000.style.display = 'flex';
+                point5000.style.display = 'flex';
+                point10000.style.display = 'flex';
+                pointHide.style.display = 'flex';
+            }
+        }
+
+        //포인트 구매버튼 알림창
+        function buyPoint(amount) {
+            myPoint += amount;
+
+            updatePoint();
+
+            Swal.fire({
+                icon: 'success',
+                title: '구매 완료!',
+                text: amount + '원이 구매되었습니다.',
+                confirmButtonText: '확인'
+            });
+        }
+
+        //보유 포인트
+        function updatePoint() {
+            document.getElementById('user-point').innerText = myPoint + ' Point';
+        }
+
+        //상품 숨겨주는 함수
+        function hideproduct() {
+            var items = ['product-name', 'product-price', 'product-number', 'brand-name', 'stock-amount', 'product-upload', 'product-hide'];
+            items.forEach(function(id){
+                document.getElementById(id).style.display = 'none';
+            });
+        }
+
+        //숨겼던 상품 보여주는 함수
+        function showProductUpload(content){
+            var productName = document.getElementById('product-name');
+            var productPrice = document.getElementById('product-price');
+            var productNumber = document.getElementById('product-number');
+            var brandName = document.getElementById('brand-name');
+            var stockAmount = document.getElementById('stock-amount');
+            var productUpload = document.getElementById('product-upload');
+            var productHide = document.getElementById('product-hide');
+
+            productName.style.display = 'none';
+            productPrice.style.display = 'none';
+            productNumber.style.display = 'none';
+            brandName.style.display = 'none';
+            stockAmount.style.display = 'none';
+            productUpload.style.display = 'none';
+            productHide.style.display = 'none';
+
+            if(content === 'show'){
+                productName.style.display = 'flex';
+                productPrice.style.display = 'flex';
+                productNumber.style.display = 'flex';
+                brandName.style.display = 'flex';
+                stockAmount.style.display = 'flex';
+                productUpload.style.display = 'flex';
+                productHide.style.display = 'flex';
+            }
+        }
+
+        //상품 등록버튼 알림창
+        function uploadProduct() {
+            var productName = document.getElementById('product-name-input').value;
+            var productPrice = document.getElementById('product-price-input').value;
+            var productNumber = document.getElementById('product-number-input').value;
+            var brandName = document.getElementById('brand-name-input').value;
+            var stockAmount = document.getElementById('stock-amount-input').value;
+
+            Swal.fire({
+                icon: 'success',
+                title: '상품 등록 완료!',
+                html: '상품명: ' + productName + '<br>' +
+                      '가격: ' + productPrice + '<br>' +
+                      '넘버: ' + productNumber + '<br>' +
+                      '브랜드: ' + brandName + '<br>' +
+                      '재고량: ' + stockAmount,
+                confirmButtonText: '확인'
+            });
+
+            // 등록 후 입력 필드 초기화
+            document.getElementById('product-name-input').value = '';
+            document.getElementById('product-price-input').value = '';
+            document.getElementById('product-number-input').value = '';
+            document.getElementById('brand-name-input').value = '';
+            document.getElementById('stock-amount-input').value = '';
+        }
+
+        //로그아웃
+        function logout() {
+            var form = document.createElement('form');
+            form.method = 'post';
+            form.action = '/users/logout'; 
+            document.body.appendChild(form);
+            form.submit();
+        }
+
+
+        // 메인 페이지가 로드될 때 실행되는 함수
+        window.onload = function() {
+            // 서버로부터 상품 정보를 가져오는 함수 호출
+            fetchProductList();
+        }
+
+        // 서버로부터 상품 정보를 가져오는 함수
+        function fetchProductList() {
+            fetch('/api/products') // 실제 경로는 서버에서 제공하는 API 경로여야 함
+                .then(response => response.json())
+                .then(products => {
+                    // 상품 정보를 받아와서 HTML로 생성하여 표시
+                    const productListDiv = document.getElementById('product-list');
+                    productListDiv.innerHTML = ''; // 기존 내용 초기화
+
+                    products.forEach(product => {
+                        const productHTML = `
+                            <div class="product">
+                                <h3>${product.name}</h3>
+                                <p>가격: ${product.price}원</p>
+                                <p>재고량: ${product.stock}</p>
+                                <p>브랜드: ${product.brand}</p>
+                            </div>
+                        `;
+                        productListDiv.innerHTML += productHTML;
+                    });
+                })
+                .catch(error => {
+                    console.error('상품 정보를 가져오는 중 에러 발생:', error);
+                });
+        }
+
+    </script>
 </head>
 <body>
-  <h1>Welcome, {{ user.name }}!</h1>
-  <p>This is your personalized page.</p>
-  <a href="#" onclick="logout(); return false;">Logout</a>
+    <div id="mypage-header">
+        <div>
+            <h1><a href="./Admin.html">5 panda</a></h1>
+        </div>
+        <div id="user-info">
+            <h1>Welcome, {{ user.name }}!</h1>
+            <a href="#" onclick="logout(); return false;">Logout</a>
+        </div>
+    </div>
+
+    <div id="mypage-content">
+        <div class="mypage-section">
+            <h2>충전 내역</h2>
+            <ul id="charge-list">
+                <li>충전 내역 1</li>
+                <li>충전 내역 2</li>
+                <li>충전 내역 3</li>
+            </ul>
+        </div>
+        
+        <div class="mypage-section">
+            <h2>거래 리스트</h2>
+            <ul id="transaction-list">
+                <li>거래 내역 1</li>
+                <li>거래 내역 2</li>
+                <li>거래 내역 3</li>
+            </ul>
+        </div>
+        
+        <div class="mypage-section">
+            <h2>{{ user.name }}님 포인트</h2>
+            <p id="user-point">0 Point</p>
+            <button onclick="showPointPurchase('show')">포인트 구매</button>
+        </div>
+
+        <div class="mypage-section">
+            <button onclick="showProductUpload('show')">상품 등록하기</button>
+        </div>
+    </div>
+
+    <!-- Hidden (포인트 구매) -->
+    <div class="container">
+        <div id="point-1000" style="display: none;">
+            <img src="money.png" alt="1100 포인트">
+            <input type="button" value="Buy" onclick="buyPoint(1100)">
+        </div>
+
+        <div id="point-5000" style="display: none;">
+            <img src="money.png" alt="5500 포인트">
+            <input type="button" value="Buy" onclick="buyPoint(5500)">
+        </div>
+
+        <div id="point-10000" style="display: none;">
+            <img src="money.png" alt="11000 포인트">
+            <input type="button" value="Buy" onclick="buyPoint(11000)">
+        </div>
+
+        <div id="point-hide" style="display: none;">
+            <input type="button" onclick="hidePoint()" value="숨기기">
+        </div>
+    </div>
+
+    <!-- Hidden (상품 등록) -->
+    <div class="container">
+        <div class="product-input" id="product-name" style="display: none;">
+            <input type="text" id="product-name-input" placeholder="상품 이름">
+        </div>
+        
+        <div class="product-input" id="product-price" style="display: none;">
+            <input type="text" id="product-price-input" placeholder="상품 가격">
+        </div>
+        
+        <div class="product-input" id="product-number" style="display: none;">
+            <input type="text" id="product-number-input" placeholder="상품 넘버">
+        </div>
+        
+        <div class="product-input" id="brand-name" style="display: none;">
+            <input type="text" id="brand-name-input" placeholder="브랜드 이름">
+        </div>
+        
+        <div class="product-input" id="stock-amount" style="display: none;">
+            <input type="text" id="stock-amount-input" placeholder="재고량">
+        </div>
+        
+        <div class="product-input" id="product-upload" style="display: none;">
+            <input type="button" class="custom-button" onclick="uploadProduct()" value="등록하기">
+        </div>
+
+        <div class="product-input" id="product-hide" style="display: none;">
+            <input type="button" class="custom-button" onclick="hideproduct()" value="숨기기">
+        </div>
+    </div>
 </body>
 </html>
