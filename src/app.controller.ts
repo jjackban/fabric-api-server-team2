@@ -1,20 +1,22 @@
 import { Controller, Get, Query, Post, Body, Render, UseGuards, Req } from '@nestjs/common';
 import { AppService } from './app.service';
+import { ProductsService } from './products/products.service';
 import { LoggedInGuard } from './auth/logged-in.guard';
-import { homepaGeGuard } from './auth/homepage.guard';
 
 @Controller()
 export class AppController {
   constructor(
-    private readonly appService: AppService
+    private readonly appService: AppService,
+    private readonly ProductsService: ProductsService
   ) {}
 
   @Get()
-  @UseGuards(homepaGeGuard)
   @Render('index')
   async indexpage(@Req() req) {
+    const products = await this.ProductsService.findAll();
     const { user } = req;
-    return { user };
+    const isSeller = user && user.id && user.id.startsWith('seller_');
+    return { products,  user, isSeller };
   }
 
   @Get('mypage')

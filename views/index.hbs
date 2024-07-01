@@ -3,6 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.24.0/axios.min.js"></script>
+    <script src="path/to/axios.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <title>옷 판매 웹사이트</title>
     <link rel="stylesheet" href="/homepage/styles.css">
 </head>
@@ -12,6 +15,10 @@
             <h1>5Panda</h1>
             <div class="user-actions">
                 {{#if user}}
+                    <span class="admin-box" id="point-box">보유포인트 : <span id="pointDisplay"></span></span>
+                    {{#if isSeller}}
+                        <a href="/register-item" id="register-item">물건등록</a>
+                    {{/if}}
                     <a href="/mypage" id="mypage">마이페이지</a>
                     <a href="/users/logout" id="auth-action">로그아웃</a>
                 {{else}}
@@ -21,28 +28,13 @@
         </div>
     </header>
 
-    <section class="banner">
-        <img src="/homepage/photo3.jpg" alt="광고 배너">
-    </section>
-
-    <section class="product-grid">
-        <div class="product">
-            <img src="/homepage/gucci.jpg" alt="상품 1">
-            <p>상품 설명 1</p>
-        </div>
-        <div class="product">
-            <img src="/homepage/hermes.jpg" alt="상품 2">
-            <p>상품 설명 2</p>
-        </div>
-        <div class="product">
-            <img src="/homepage/Chanel.jpg" alt="상품 3">
-            <p>상품 설명 3</p>
-        </div>
-        <div class="product">
-            <img src="/homepage/louis.jpg" alt="상품 4">
-            <p>상품 설명 4</p>
-        </div>
-        <!-- 추가 상품 블록들 -->
+    <section class="product-grid" id="productGrid">
+        {{#each products}}
+            <div class="product">
+                <p>{{this.name}} - {{this.brand}} - {{this.price}}원</p>
+                <button class="buy-button" onclick="buyProduct('{{this.price}}', '{{this.brand}}_{{this.styleNum}}')">구매</button>
+            </div>
+        {{/each}}
     </section>
 
     <div class="pagination">
@@ -56,5 +48,71 @@
         <p>&copy; 2024 옷 판매 웹사이트. 모든 권리 보유.</p>
     </footer>
 
+ <script>
+      document.addEventListener('DOMContentLoaded', async () => {
+        queryPoints();
+        });
+
+        async function queryPoints() {
+            const name = {{user.name}};
+            try {
+                const response = await axios.get(`/query?name=${name}`);
+                const points = response.data;
+                document.getElementById('pointDisplay').innerText = `${points}`;
+            } catch (error) {
+                console.error('포인트 조회 에러:', error);
+            }
+        }
+
+        function buyProduct(price, productinfo) {
+            const data = {
+                price: price,
+                productinfo: productinfo,
+                user: {{user.name}},
+                admin: 'admin'
+            };
+
+            const purchaseUrl = `/purchaseItem?user=${data.user}&itemId=${data.productinfo}`;
+            const invokeUrl = `/invoke?sender=${data.user}&reciever=${data.admin}&value=${data.price}`;
+
+            // Promise.all을 사용하여 두 개의 비동기 요청을 동시에 실행
+            Promise.all([
+                fetch(purchaseUrl).then(response => {
+                    if (!response.ok) {
+                        throw new Error('구매 요청이 실패했습니다. 나중에 다시 시도해주세요.');
+                    }
+                    return response.text();
+                }),
+                fetch(invokeUrl).then(response => {
+                    if (!response.ok) {
+                        throw new Error('invoke 요청이 실패했습니다.');
+                    }
+                    return response.text();
+                })
+            ])
+            .then(([purchaseResponseText, invokeResponseText]) => {
+                // 구매 성공 SweetAlert 메시지
+                Swal.fire({
+                    title: '구매 완료',
+                    text: purchaseResponseText, // 서버에서 받은 응답 메시지를 표시합니다
+                    icon: 'success',
+                    confirmButtonText: '확인'
+                });
+
+                // invoke 응답 콘솔에 출력
+                console.log('Invoke 응답:', invokeResponseText);
+            })
+            .catch(error => {
+                // 오류 처리
+                console.error('요청 실패', error);
+                Swal.fire({
+                    title: '구매 실패',
+                    text: error.message || '구매 과정에서 문제가 발생했습니다.',
+                    icon: 'error',
+                    confirmButtonText: '확인'
+                });
+            });
+        }
+    </script>
 </body>
 </html>
