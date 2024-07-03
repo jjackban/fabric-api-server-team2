@@ -11,10 +11,17 @@ export class UsersController {
 
     @Post('join')
     async Join(@Body() body){
-        let userval: string = '100000';
-        const args = [body.id, userval];
-        await this.UsersService.Join(body.id, body.password, body.name);
-        await send(false, 'init', args);
+        if (body.id.startsWith('seller_')) {
+            await this.UsersService.Join(body.id, body.password, body.name);
+            let userval: string = '0';
+            const args = [body.id, userval];
+            await send(false, 'init', args);
+        } else {
+            await this.UsersService.Join(body.id, body.password, body.name);
+            let userval: string = '100000';
+            const args = [body.id, userval];
+            await send(false, 'init', args);
+        }
     }
 
     @UseGuards(localAuthGuard)

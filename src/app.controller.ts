@@ -2,12 +2,11 @@ import { Controller, Get, Query, Post, Body, Render, UseGuards, Req } from '@nes
 import { AppService } from './app.service';
 import { ProductsService } from './products/products.service';
 import { LoggedInGuard } from './auth/logged-in.guard';
-
 @Controller()
 export class AppController {
   constructor(
     private readonly appService: AppService,
-    private readonly ProductsService: ProductsService
+    private readonly ProductsService: ProductsService,
   ) {}
 
   @Get()
@@ -16,7 +15,9 @@ export class AppController {
     const products = await this.ProductsService.findAll();
     const { user } = req;
     const isSeller = user && user.id && user.id.startsWith('seller_');
-    return { products,  user, isSeller };
+    const ipAddress = process.env.IP_ADDRESS;
+    console.log(ipAddress);
+    return { products, user, isSeller, ipAddress };
   }
 
   @Get('mypage')
@@ -37,6 +38,14 @@ export class AppController {
   @Render('login')
   async loginpage(){
     return;
+  }
+
+  @Get('registerItem')
+  @UseGuards(LoggedInGuard)
+  @Render('registerItem')
+  async registerItempage(@Req() req) {
+    const { user } = req;
+    return { user };
   }
 
   @Get('/init')

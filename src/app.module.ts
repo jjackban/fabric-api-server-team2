@@ -3,6 +3,7 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Product } from './entities/product.entity';
+import { Sellers } from './entities/seller.entity';
 import { ProductsService } from './products/products.service';
 import { User } from './entities/user.entity';
 import { ConfigModule, ConfigService } from '@nestjs/config';
@@ -14,8 +15,8 @@ import { ProductsController } from './products/products.controller';
 @Module({
   imports: [
     ConfigModule.forRoot({
-      isGlobal: true,
       envFilePath: 'process.env',
+      isGlobal: true,
     }),
     TypeOrmModule.forRootAsync({
       imports: [ConfigModule],
@@ -26,7 +27,7 @@ import { ProductsController } from './products/products.controller';
         username: configService.get<string>('DB_USERNAME'),
         password: configService.get<string>('DB_PASSWORD'),
         database: configService.get<string>('DB_DATABASE'),
-        entities: [Product, User],
+        entities: [Product, User, Sellers],
         synchronize: true,
         charset: 'utf8mb4',
         logging: true,
@@ -34,7 +35,7 @@ import { ProductsController } from './products/products.controller';
       inject: [ConfigService],
     }),
     AuthModule,
-    TypeOrmModule.forFeature([Product, User]),
+    TypeOrmModule.forFeature([Product, User, Sellers]),
   ],
   controllers: [AppController,ProductsController, UsersController],
   providers: [AppService, ProductsService, UsersService],

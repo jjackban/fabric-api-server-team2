@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>물건등록</title>
+    <link href="https://fonts.googleapis.com/css?family=Lobster&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Single+Day&display=swap&subset=korean" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Nanum+Brush+Script&display=swap&subset=korean" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.24.0/axios.min.js"></script>
+    
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+
+        #message {
+        color: red;
+        text-align: center;
+        margin-top: 10px; /* 메시지 위쪽 여백 추가 */
+        }
+
+        #mypage-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: #333;
+            color: white;
+            padding: 10px 20px;
+        }
+
+        #mypage-header h1 a {
+            color: white;
+            text-decoration: none;
+        }
+
+        #user-info {
+            text-align: right;
+        }
+
+        #user-info a {
+            color: white;
+            text-decoration: none;
+            margin-left: 10px;
+        }
+
+        #mypage-content {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+            padding: 20px;
+        }
+
+        .mypage-section {
+            border: 1px solid #ccc;
+            padding: 10px;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+
+        }
+
+        .mypage-section h2 {
+            font-family: 'Lobster', cursive;
+            font-size: 24px;
+            margin-bottom: 10px;
+        }
+
+        ul {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        ul li {
+            margin-bottom: 5px;
+        }
+
+        #user-point {
+            font-family: 'Single Day', sans-serif;
+            font-size: 18px;
+        }
+
+        button {
+            background-color: #333;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            cursor: pointer;
+            font-size: 14px;
+            width: auto; 
+            margin: 0 auto; 
+            display: block; 
+        }
+
+        button:hover {
+            background-color: #555;
+        }
+
+        .container {
+            text-align: center;
+            margin-top: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center; 
+        }
+
+        .container img {
+            max-width: 100%;
+            height: auto;
+            margin-bottom: 10px;
+        }
+
+        .container input[type="button"] {
+            width: auto;
+            margin-top: 10px;
+            background-color: #333;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: background-color 0.3s;
+        }
+
+        .container input[type="button"]:hover {
+            background-color: #555;
+        }
+
+        input[type="text"] {
+            width: 100%;
+            padding: 5px;
+            margin-bottom: 5px;
+            box-sizing: border-box;
+        }
+
+        footer {
+            background-color: #333;
+            color: white;
+            text-align: center;
+            padding: 10px 0;
+            position: fixed;
+            width: 100%;
+            bottom: 0;
+        }
+
+        .product-input {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 10px;
+        }
+
+        .custom-button {
+            background-color: #333;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            cursor: pointer;
+            font-size: 14px;
+            margin-top: 10px;
+            transition: background-color 0.3s;
+            width: auto;
+        }
+
+        .custom-button:hover {
+            background-color: #555;
+        }
+    </style>
+
+  
+</head>
+<body>
+    <div id="mypage-header">
+        <div>
+            <h1><a href="/">5 panda</a></h1>
+        </div>
+        <div id="user-info">
+             <a href="/users/logout" id="auth-action">로그아웃</a>
+        </div>
+    </div>
+
+     <div id="product-form">
+        <form id="product-form">
+            <h2>상품입력창</h2>
+            <label for="product-name-input">상품 이름:</label>
+            <input type="text" id="product-name-input" placeholder="Enter product name"><br><br>
+
+            <label for="style-num-input">품명:</label>
+            <input type="text" id="style-num-input" placeholder="Enter style number"><br><br>
+
+            <label for="price-input">가격:</label>
+            <input type="text" id="price-input" placeholder="Enter price"><br><br>
+
+            <label for="inventory-input">재고량:</label>
+            <input type="text" id="inventory-input" placeholder="Enter inventory"><br><br>
+
+            <label for="image-input">이미지:</label>
+            <input type="file" id="image-input" accept="image/*"onchange="previewImage(event)"><br>
+            <img id="image-display" src="" alt="Selected Image" style="max-width: 500px; display: none;"><br><br>
+
+            <div id="message"></div><br><br>
+            <button type="submit">상품등록하기</button>
+        </form>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script>
+     document.getElementById('product-form').addEventListener('submit', async function(event) {
+      event.preventDefault();
+
+            const name = document.getElementById('product-name-input').value;
+            const styleNum = document.getElementById('style-num-input').value;
+            const brand = `{{user.name}}`;
+            const seller = `{{user.id}}`;
+            const price = document.getElementById('price-input').value;
+            const inventory = document.getElementById('inventory-input').value;
+            const image = document.getElementById('image-input').files[0];
+
+            // 유효성 검사 (예: 필수 입력 여부 등)
+            if (!name || !styleNum || !brand || !price || !inventory || !image) {
+                document.getElementById('message').innerText = '상품 정보를 모두 입력해주세요.';
+                return;
+            }
+     
+        const formData = new FormData();
+        formData.append('name', name);
+        formData.append('seller', seller);
+        formData.append('styleNum', styleNum);
+        formData.append('brand', brand);
+        formData.append('inventory', inventory);
+        formData.append('price', price);
+        formData.append('image', image);
+
+        try {
+            const response = await axios.post('/products/create', formData, {
+                headers: {
+                    'Content-Type': 'multipart/form-data'
+                }
+            });
+        Swal.fire({
+          icon: 'success',
+          title: '물품등록 성공!',
+          confirmButtonText: '확인'
+        }).then((result) => {
+          if (result.isConfirmed) {
+            window.location.href = '/registerItem'; 
+          }
+        });
+      } catch (error) {
+        console.error('Sign Up error:', error);
+        document.getElementById('message').innerText = '물품등록에 실패했습니다. 다시 시도해 주세요.';
+      }
+    });
+
+    function previewImage(event) {
+        var input = event.target;
+        var reader = new FileReader();
+        
+        reader.onload = function(){
+            var dataURL = reader.result;
+            var imageDisplay = document.getElementById('image-display');
+            imageDisplay.src = dataURL;
+            imageDisplay.style.display = 'block';
+        };
+        
+        reader.readAsDataURL(input.files[0]);
+    };
+  </script>
+</body>
+</html>
