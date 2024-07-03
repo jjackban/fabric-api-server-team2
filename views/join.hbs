@@ -37,6 +37,11 @@
       const confirmPassword = document.getElementById('confirmPassword').value;
       const name = document.getElementById('name').value;
 
+      if (id.includes('seller_') || id.includes('_')) {
+            document.getElementById('message').innerText = 'ID에는 언더스코어(_)를 포함할 수 없습니다. 다시 입력해주세요.';
+            return;
+      }
+
       if (password !== confirmPassword) {
         document.getElementById('message').innerText = '비밀번호가 일치하지 않습니다.';
         return;

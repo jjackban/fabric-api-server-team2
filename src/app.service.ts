@@ -3,6 +3,9 @@ import { send } from './util/connectFabric';
 
 @Injectable()
 export class AppService {
+  getData() {
+    throw new Error('Method not implemented.');
+  }
 
   async init(user:string, userval:string) {
     const args = [user, userval];
@@ -34,12 +37,12 @@ export class AppService {
     return await send(true, 'query', args);
   }
 
-  async queryitem(itemId:string) {
+  async queryitem(itemId:string){
     const args = [itemId];
     return await send(true, 'queryitem', args);
   }
 
-  async querypurchase(user:string) {
+  async querypurchase(user: string) {
     const args = [user];
     return await send(true, 'querypurchase', args);
   }

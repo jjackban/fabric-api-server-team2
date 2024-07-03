@@ -8,6 +8,7 @@
     <link href="https://fonts.googleapis.com/css?family=Single+Day&display=swap&subset=korean" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css?family=Nanum+Brush+Script&display=swap&subset=korean" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.24.0/axios.min.js"></script>
     
 
     <style>
@@ -108,13 +109,19 @@
             margin-bottom: 10px;
         }
 
+        .container img {
+            width: 120px;
+            height: 120px;
+            margin-right: 20px;
+        }
+
         .container input[type="button"] {
-            width: auto;
-            margin-top: 10px;
+            width: 150px;
+            height: 35px;
+            margin-top: 35px;
             background-color: #333;
             color: white;
             border: none;
-            padding: 10px 20px;
             cursor: pointer;
             font-size: 14px;
             transition: background-color 0.3s;
@@ -165,7 +172,9 @@
     </style>
 
     <script>
-        var myPoint = 0;
+         document.addEventListener('DOMContentLoaded', async () => {
+            await updatePoint();
+        });
 
         //포인트 숨겨주는 함수
         function hidePoint() {
@@ -177,17 +186,20 @@
 
         //숨겼던 포인트 보여주는 함수
         function showPointPurchase(content){
+            var pointTitle = document.getElementById('point-title');
             var point1000 = document.getElementById('point-1000');
             var point5000 = document.getElementById('point-5000');
             var point10000 = document.getElementById('point-10000');
             var pointHide = document.getElementById('point-hide');
 
+            pointTitle.style.display = 'none';       
             point1000.style.display = 'none';
             point5000.style.display = 'none';
             point10000.style.display = 'none';
             pointHide.style.display = 'none';
 
             if(content === 'show'){
+                pointTitle.style.display = 'flex';
                 point1000.style.display = 'flex';
                 point5000.style.display = 'flex';
                 point10000.style.display = 'flex';
@@ -195,23 +207,54 @@
             }
         }
 
-        //포인트 구매버튼 알림창
         function buyPoint(amount) {
-            myPoint += amount;
+            const user = `{{user.name}}`;
 
-            updatePoint();
+            const url = `/charge?user=${user}&userval=${amount}`;
 
-            Swal.fire({
-                icon: 'success',
-                title: '구매 완료!',
-                text: amount + '원이 구매되었습니다.',
-                confirmButtonText: '확인'
-            });
+            fetch(url)
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('서버에서 요청을 처리하지 못했습니다.');
+                    }
+                    return response.text();
+                })
+                .then(chargeResponseText => {
+                        Swal.fire({
+                            title: '포인트 구매 완료',
+                            text: `구매한 포인트: ${amount}`,
+                            icon: 'success',
+                            showConfirmButton: false,
+                        });
+                    }).then((result) => {
+                        setTimeout(() => {
+                            location.reload();
+                        }, 1500);
+                    })
+                .catch(error => {
+                    console.error('포인트 구매 오류:', error);
+                    Swal.fire({
+                        title: '포인트 구매 오류',
+                        text: '구매 과정에서 문제가 발생했습니다. 나중에 다시 시도해주세요.',
+                        icon: 'error',
+                        confirmButtonText: '확인'
+                    });
+                });
         }
 
         //보유 포인트
-        function updatePoint() {
-            document.getElementById('user-point').innerText = myPoint + ' Point';
+        async function updatePoint() {
+             const name = `{{user.id}}`;
+            try {
+                const response = await axios.get(`/query?name=${name}`);
+                const points = response.data;
+                document.getElementById('user-point').innerText = `${points}` + ' point';
+
+                const transactionsResponse = await axios.get(`/querypurchase?user=${name}`);
+                
+            } catch (error) {
+                console.error('데이터 조회 에러:', error);
+            }
         }
 
         //상품 숨겨주는 함수
@@ -251,73 +294,13 @@
             }
         }
 
-        //상품 등록버튼 알림창
-        function uploadProduct() {
-            var productName = document.getElementById('product-name-input').value;
-            var productPrice = document.getElementById('product-price-input').value;
-            var productNumber = document.getElementById('product-number-input').value;
-            var brandName = document.getElementById('brand-name-input').value;
-            var stockAmount = document.getElementById('stock-amount-input').value;
-
-            Swal.fire({
-                icon: 'success',
-                title: '상품 등록 완료!',
-                html: '상품명: ' + productName + '<br>' +
-                      '가격: ' + productPrice + '<br>' +
-                      '넘버: ' + productNumber + '<br>' +
-                      '브랜드: ' + brandName + '<br>' +
-                      '재고량: ' + stockAmount,
-                confirmButtonText: '확인'
-            });
-
-            // 등록 후 입력 필드 초기화
-            document.getElementById('product-name-input').value = '';
-            document.getElementById('product-price-input').value = '';
-            document.getElementById('product-number-input').value = '';
-            document.getElementById('brand-name-input').value = '';
-            document.getElementById('stock-amount-input').value = '';
-        }
-
         //로그아웃
         function logout() {
             var form = document.createElement('form');
-            form.method = 'post';
+            form.method = 'get';
             form.action = '/users/logout'; 
             document.body.appendChild(form);
             form.submit();
-        }
-
-
-        // 메인 페이지가 로드될 때 실행되는 함수
-        window.onload = function() {
-            // 서버로부터 상품 정보를 가져오는 함수 호출
-            fetchProductList();
-        }
-
-        // 서버로부터 상품 정보를 가져오는 함수
-        function fetchProductList() {
-            fetch('/api/products') // 실제 경로는 서버에서 제공하는 API 경로여야 함
-                .then(response => response.json())
-                .then(products => {
-                    // 상품 정보를 받아와서 HTML로 생성하여 표시
-                    const productListDiv = document.getElementById('product-list');
-                    productListDiv.innerHTML = ''; // 기존 내용 초기화
-
-                    products.forEach(product => {
-                        const productHTML = `
-                            <div class="product">
-                                <h3>${product.name}</h3>
-                                <p>가격: ${product.price}원</p>
-                                <p>재고량: ${product.stock}</p>
-                                <p>브랜드: ${product.brand}</p>
-                            </div>
-                        `;
-                        productListDiv.innerHTML += productHTML;
-                    });
-                })
-                .catch(error => {
-                    console.error('상품 정보를 가져오는 중 에러 발생:', error);
-                });
         }
 
     </script>
@@ -325,7 +308,7 @@
 <body>
     <div id="mypage-header">
         <div>
-            <h1><a href="./Admin.html">5 panda</a></h1>
+            <h1><a href="/">5 panda</a></h1>
         </div>
         <div id="user-info">
             <h1>Welcome, {{ user.name }}!</h1>
@@ -343,12 +326,9 @@
             </ul>
         </div>
         
-        <div class="mypage-section">
+       <div class="mypage-section">
             <h2>거래 리스트</h2>
             <ul id="transaction-list">
-                <li>거래 내역 1</li>
-                <li>거래 내역 2</li>
-                <li>거래 내역 3</li>
             </ul>
         </div>
         
@@ -358,62 +338,29 @@
             <button onclick="showPointPurchase('show')">포인트 구매</button>
         </div>
 
-        <div class="mypage-section">
-            <button onclick="showProductUpload('show')">상품 등록하기</button>
-        </div>
-    </div>
 
     <!-- Hidden (포인트 구매) -->
     <div class="container">
+         <div id="point-title" style="display: none;">
+            충전시 10% 또는 15%로 포인트를 더 드립니다!
+        </div>
         <div id="point-1000" style="display: none;">
-            <img src="money.png" alt="1100 포인트">
-            <input type="button" value="Buy" onclick="buyPoint(1100)">
+            <img src="/mypage/KakaoTalk_20240702_140258676_02.png" alt="10000 포인트" class="money-image">
+            <input type="button" value="10000포인트" onclick="buyPoint(10000)">
         </div>
 
         <div id="point-5000" style="display: none;">
-            <img src="money.png" alt="5500 포인트">
-            <input type="button" value="Buy" onclick="buyPoint(5500)">
+            <img src="/mypage/KakaoTalk_20240702_140258676_01.png" alt="50000 포인트" class="money-image">
+            <input type="button" value="50000포인트" onclick="buyPoint(50000)">
         </div>
 
         <div id="point-10000" style="display: none;">
-            <img src="money.png" alt="11000 포인트">
-            <input type="button" value="Buy" onclick="buyPoint(11000)">
+            <img src="/mypage/KakaoTalk_20240702_140258676.png" alt="100000 포인트" class="money-image">
+            <input type="button" value="100000포인트" onclick="buyPoint(100000)">
         </div>
 
         <div id="point-hide" style="display: none;">
-            <input type="button" onclick="hidePoint()" value="숨기기">
+            <input type="button" onclick="hidePoint()" value="닫기">
         </div>
-    </div>
-
-    <!-- Hidden (상품 등록) -->
-    <div class="container">
-        <div class="product-input" id="product-name" style="display: none;">
-            <input type="text" id="product-name-input" placeholder="상품 이름">
-        </div>
-        
-        <div class="product-input" id="product-price" style="display: none;">
-            <input type="text" id="product-price-input" placeholder="상품 가격">
-        </div>
-        
-        <div class="product-input" id="product-number" style="display: none;">
-            <input type="text" id="product-number-input" placeholder="상품 넘버">
-        </div>
-        
-        <div class="product-input" id="brand-name" style="display: none;">
-            <input type="text" id="brand-name-input" placeholder="브랜드 이름">
-        </div>
-        
-        <div class="product-input" id="stock-amount" style="display: none;">
-            <input type="text" id="stock-amount-input" placeholder="재고량">
-        </div>
-        
-        <div class="product-input" id="product-upload" style="display: none;">
-            <input type="button" class="custom-button" onclick="uploadProduct()" value="등록하기">
-        </div>
-
-        <div class="product-input" id="product-hide" style="display: none;">
-            <input type="button" class="custom-button" onclick="hideproduct()" value="숨기기">
-        </div>
-    </div>
 </body>
 </html>
