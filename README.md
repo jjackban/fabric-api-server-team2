@@ -1,73 +1,68 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="200" alt="Nest Logo" /></a>
-</p>
+﻿# 프로젝트 결과 보고서
+![페이지 1](./pdf_img/page_1.png)
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+![페이지 2](./pdf_img/page_2.png)
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://coveralls.io/github/nestjs/nest?branch=master" target="_blank"><img src="https://coveralls.io/repos/github/nestjs/nest/badge.svg?branch=master#9" alt="Coverage" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+![페이지 3](./pdf_img/page_3.png)
 
-## Description
+![페이지 4](./pdf_img/page_4.png)
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+![페이지 5](./pdf_img/page_5.png)
 
-## Installation
+![페이지 6](./pdf_img/page_6.png)
 
-```bash
-$ npm install
-```
+![페이지 7](./pdf_img/page_7.pngg)
 
-## Running the app
+![페이지 8](./pdf_img/page_8.png)
 
-```bash
-# development
-$ npm run start
+![페이지 9](./pdf_img/page_9.png)
 
-# watch mode
-$ npm run start:dev
+![페이지 10](./pdf_img/page_10.png)
 
-# production mode
-$ npm run start:prod
-```
+![페이지 11](./pdf_img/page_11.png)
 
-## Test
+![페이지 12](./pdf_img/page_12.png)
 
-```bash
-# unit tests
-$ npm run test
+![페이지 13](./pdf_img/page_13.png)
 
-# e2e tests
-$ npm run test:e2e
+![페이지 14](./pdf_img/page_14.png)
 
-# test coverage
-$ npm run test:cov
-```
+![페이지 15](./pdf_img/page_15.png)
 
-## Support
+![페이지 16](./pdf_img/page_16.png)
 
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
+![페이지 17](./pdf_img/page_17.png)
 
-## Stay in touch
+![페이지 18](./pdf_img/page_18.png)
 
-- Author - [Kamil Myśliwiec](https://kamilmysliwiec.com)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
+![페이지 19](./pdf_img/page_19.png)
 
-## License
+![페이지 20](./pdf_img/page_20.png)
 
-Nest is [MIT licensed](LICENSE).
+![페이지 21](./pdf_img/page_21.png)
+
+![페이지 22](./pdf_img/page_22.png)
+
+![페이지 23](./pdf_img/page_23.pngg)
+
+![페이지 24](./pdf_img/page_24.png)
+
+![페이지 25](./pdf_img/page_25.png)
+
+![페이지 26](./pdf_img/page_26.png)
+
+![페이지 27](./pdf_img/page_27.png)
+
+![페이지 28](./pdf_img/page_28.png)
+
+![페이지 29](./pdf_img/page_29.png)
+
+![페이지 30](./pdf_img/page_30.png)
+
+![페이지 31](./pdf_img/page_31.png)
+
+![페이지 32](./pdf_img/page_32.png)
+
+![페이지 33](./pdf_img/page_33.png)
+
+![페이지 34](./pdf_img/page_34.png)
