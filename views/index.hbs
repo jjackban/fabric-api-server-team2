@@ -41,6 +41,9 @@
             <div class="user-actions">
                 {{#if user}}
                     <span class="admin-box" id="point-box">보유포인트 : <span id="pointDisplay"></span></span>
+                    {{#if admin}}
+                        <a href="/sellerJoin" id="register-item">판매자 등록</a>
+                     {{/if}}
                     {{#if isSeller}}
                         <a href="/registerItem" id="register-item">물건등록</a>
                     {{/if}}
@@ -72,7 +75,11 @@
             {{#each products}}
                 <div class="product">
                     <img src="/images/{{this.image}}" alt="상품 이미지" class="product-image">
-                    <p>{{this.name}} - {{this.brand}} - {{this.price}}원</p>
+                    <div class="product-ingfo">
+                        <span class="brand">{{this.brand}}</span><br>
+                        <span class="name">{{this.name}}</span><br>
+                        <span class="price">{{this.price}}원</span><br>
+                    </div>
                     <button class="buy-button" onclick="buyProduct('{{this.price}}', '{{this.brand}}_{{this.styleNum}}', '{{this.seller}}')">구매</button>
                 </div>
             {{/each}}
@@ -82,7 +89,11 @@
             {{#each products}}
                 <div class="product">
                     <img src="/images/{{this.image}}" alt="상품 이미지" class="product-image">
-                    <p>{{this.name}} - {{this.brand}} - {{this.price}}원</p>
+                    <div class="product-ingfo">
+                        <span class="brand">{{this.brand}}</span><br>
+                        <span class="name">{{this.name}}</span><br>
+                        <span class="price">{{this.price}}원</span><br>
+                    </div>
                     <button class="buy-button" onclick="nonlogin_buyButton()">구매</button>
                 </div>
             {{/each}}
@@ -133,7 +144,7 @@
     const data = {
         price: price,
         productinfo: productinfo,
-        user: '{{user.name}}', // 사용자 이름을 가져옵니다 (예시: '{{user.name}}')
+        user: '{{user.id}}', // 사용자 이름을 가져옵니다 (예시: '{{user.name}}')
         seller: seller
     };
 

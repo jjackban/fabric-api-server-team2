@@ -15,9 +15,10 @@ export class AppController {
     const products = await this.ProductsService.findAll();
     const { user } = req;
     const isSeller = user && user.id && user.id.startsWith('seller_');
+    const admin = user && user.id === '5pandaadmin';
     const ipAddress = process.env.IP_ADDRESS;
     console.log(ipAddress);
-    return { products, user, isSeller, ipAddress };
+    return { products, user, isSeller, admin, ipAddress };
   }
 
   @Get('mypage')
@@ -31,6 +32,12 @@ export class AppController {
   @Get('join')
   @Render('join')
   async joinpage(){
+    return;
+  }
+
+  @Get('sellerJoin')
+  @Render('sellerJoin')
+  async sellerJoinpage(){
     return;
   }
 
