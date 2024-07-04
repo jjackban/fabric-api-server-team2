@@ -208,7 +208,7 @@
         }
 
         function buyPoint(amount) {
-            const user = `{{user.name}}`;
+            const user = `{{user.id}}`;
 
             const url = `/charge?user=${user}&userval=${amount}`;
 
@@ -317,7 +317,7 @@
     </div>
 
     <div id="mypage-content">
-        <div class="mypage-section">
+        {{!-- <div class="mypage-section">
             <h2>충전 내역</h2>
             <ul id="charge-list">
                 <li>충전 내역 1</li>
@@ -331,7 +331,7 @@
             <ul id="transaction-list">
             </ul>
         </div>
-        
+         --}}
         <div class="mypage-section">
             <h2>{{ user.name }}님 포인트</h2>
             <p id="user-point">0 Point</p>

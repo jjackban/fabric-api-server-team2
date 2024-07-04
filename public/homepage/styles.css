@@ -63,10 +63,24 @@ h1 {
 .product {
     border: 1px solid #ccc;
     padding: 10px;
-    text-align: center;
     display: flex;
     flex-direction: column;
-    align-items: center;
+}
+
+.product button {
+    margin-top: 20px; /* 버튼 위 여백 */
+    width: 60px; /* 버튼 너비 설정 */
+    height: 30px; /* 버튼 높이 설정 */
+    text-align: center; /* 버튼 텍스트를 중앙 정렬 */
+    align-self: center; /* 부모 컨테이너 내에서 가로 중앙 정렬 */
+}
+
+.price{
+    font-size: 0.8em; /* 글자 크기 줄이기 */
+}
+
+.name {
+    font-weight: bold; /* 글자 굵게 */
 }
 
 .product img {
