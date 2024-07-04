@@ -43,7 +43,7 @@
 
 ![페이지 22](./pdf_img/page_22.png)
 
-![페이지 23](./pdf_img/page_23.pngg)
+![페이지 23](./pdf_img/page_23.png)
 
 ![페이지 24](./pdf_img/page_24.png)
 
