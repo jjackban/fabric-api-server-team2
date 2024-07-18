@@ -11,7 +11,7 @@
 
 ![페이지 6](./pdf_img/page_6.png)
 
-![페이지 7](./pdf_img/page_7.pngg)
+![페이지 7](./pdf_img/page_7.png)
 
 ![페이지 8](./pdf_img/page_8.png)
 
